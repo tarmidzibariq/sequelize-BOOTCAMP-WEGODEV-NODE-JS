@@ -56,6 +56,29 @@ router.post("/register", authController.register);
  *      description: Internal Server Error
 */
 router.post("/login", authController.login);
+/**
+ * @swagger
+ * /auth/refresh:
+ *   post:
+ *    tags: 
+ *        - Auth
+ *    description: Refresh Auth
+ *    requestBody:
+ *      content:
+ *        application/json:
+ *          schema:
+ *            type: object
+ *            properties:
+ *              refreshToken:
+ *                type: string        
+ *    responses:
+ *     200:
+ *      description: Success Register user
+ *     400:
+ *      description: Error
+ *     500:
+ *      description: Internal Server Error
+*/
 router.post("/refresh", authController.refresh);
 
 module.exports = router;
