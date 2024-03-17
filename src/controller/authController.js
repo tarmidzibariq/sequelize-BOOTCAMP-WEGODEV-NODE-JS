@@ -2,6 +2,7 @@ const { Users } = require("../models");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const env = require("dotenv").config().parsed;
+const sendEmail = require('../helper/sendEmail').sendEmail;
 
 class authController {
 
@@ -84,6 +85,17 @@ class authController {
                 });
             }
 
+            const reqToSend = {
+                body: {
+                    subject: "Register",
+                    to: user.email,
+                    message: `Terima kasih karena user ${user.nama} telah mendaftar`
+                }
+            };
+
+            // Pemanggilan fungsi sendEmail secara sederhana tanpa menunggu respons
+            sendEmail(reqToSend, null).catch(console.error);
+            
             const { accessToken, refreshToken } = await this.generateToken(user);
 
             return res.status(200).json({

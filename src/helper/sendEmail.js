@@ -19,9 +19,12 @@ class sendEmail {
     }
     sendEmail = async(req, res) => {
         try {
-            let htmlContent = await this.readHTMLFile(htmlFilePath);
-            htmlContent = htmlContent.replace('{{name}}', 'Bariq');
+            const { to,subject, message } = req.body;
 
+            // membaca file html
+            let htmlContent = await this.readHTMLFile(htmlFilePath);
+            const recipientName = to.split('@')[0];
+            htmlContent = htmlContent.replace('{{name}}', recipientName).replace('{{message}}', message);
             const transporter = nodemailer.createTransport({
                 host: env.MAILTRAP_HOST,
                 port: env.MAILTRAP_PORT,
@@ -34,9 +37,8 @@ class sendEmail {
 
             const info = await transporter.sendMail({
                 from: '"Example Sender" <sender@example.com>', // sender address
-                to: "tarmidzibariq30@gmail.com", // list of receivers
-                subject: "Hello ✔", // Subject line
-                // text: "Hello world?", // plain text body
+                to: to, // list of receivers
+                subject: subject, // Subject lin
                 html: htmlContent , // html body
             });
             // if(err)
